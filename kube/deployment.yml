@@ -1,0 +1,43 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: chaos-monkey
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: chaos-monkey
+    spec:
+      serviceAccountName: "chaos-monkey"
+      containers:
+        - name: chaos-monkey
+          image: jasonyihk/chaos-monkey:latest
+          resources:
+            requests:
+              memory: "32Mi"
+              cpu: "0.1"
+            limits:
+              memory: "128Mi"
+              cpu: "0.1"
+          env:
+            - name: "CHAOS_MONKEY_KILL_FREQUENCY_SECONDS"
+              valueFrom:
+                configMapKeyRef:
+                  key: "chaos-monkey-kill-frequency-seconds"
+                  name: "chaos-monkey"
+            - name: "CHAOS_MONKEY_NAMESPACE_INCLUDES"
+              valueFrom:
+                configMapKeyRef:
+                  key: "chaos-monkey-namespace-includes"
+                  name: "chaos-monkey"  
+            - name: "CHAOS_MONKEY_POD_INCLUDES"
+              valueFrom:
+                configMapKeyRef:
+                  key: "chaos-monkey-pod-includes"
+                  name: "chaos-monkey"  
+            - name: "CHAOS_MONKEY_POD_EXCLUDES"
+              valueFrom:
+                configMapKeyRef:
+                  key: "chaos-monkey-pod-excludes"
+                  name: "chaos-monkey"  

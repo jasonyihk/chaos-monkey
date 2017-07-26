@@ -1,0 +1,38 @@
+apiVersion: "v1"
+data:
+  chaos-monkey-kill-frequency-seconds: "60"
+  chaos-monkey-namespace-includes: "dev,uat"
+  chaos-monkey-pod-includes: "*"
+  chaos-monkey-pod-excludes: "jenkins*,*ingress*,calico*,heapster*,es*,fluentd*,grafana*,alert*"
+kind: "ConfigMap"
+metadata:
+  annotations:
+    description: "Randomly kills pods to check environment stability"
+    json-schema: >
+        {
+          "type": "object",
+          "properties": {
+            "CHAOS_MONKEY_NAMESPACE": {
+              "type": "string",
+              "description": "Comma separated list of patterns for nmaespaces which should be considered for deletion",
+              "default": "*"
+            },           
+            "CHAOS_MONKEY_INCLUDES": {
+              "type": "string",
+              "description": "Comma separated list of patterns for pods which should be considered for deletion",
+              "default": "*"
+            },
+            "CHAOS_MONKEY_EXCLUDES": {
+              "type": "string",
+              "description": "Comma separated list of patterns for pods which should not be deleted",
+              "default": "jenkins*,*ingress*,calico*,heapster*,es*,fluentd*,grafana*,alert*"
+            },
+            "CHAOS_MONKEY_KILL_FREQUENCY_SECONDS": {
+              "type": "string",
+              "description": "The number of seconds between a kill",
+              "default": "60"
+            }
+          }
+        }
+  labels: {}
+  name: "chaos-monkey"
