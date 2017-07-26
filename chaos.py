@@ -47,11 +47,11 @@ while True:
 
     LOGGER.info("Terminating pod %s/%s", pod.metadata.namespace, pod.metadata.name)
     event_name = "Chaos monkey kill pod %s" % pod.metadata.name
-    #v1.delete_namespaced_pod(
-    #    name=pod.metadata.name,
-    #    namespace=pod.metadata.namespace,
-    #    body=kubernetes.client.V1DeleteOptions(),
-    #)
+    v1.delete_namespaced_pod(
+        name=pod.metadata.name,
+        namespace=pod.metadata.namespace,
+        body=kubernetes.client.V1DeleteOptions(),
+    )
     event_timestamp = datetime.datetime.now(pytz.utc)
     try:
         event = v1.read_namespaced_event(event_name, namespace=pod.metadata.namespace)
